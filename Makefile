@@ -8,13 +8,13 @@ LIB = 	-l sqlite3 -pthread
 
 
 SRC_FILES =		main.cpp \
+                nested_map_test.cpp \
+                string_as_key_test.cpp \
+                int_as_key_test.cpp
 
 
-HEADERS = 		$(INC_DIR)DbWriter.hpp \
-				$(INC_DIR)DirectoryMonitor.hpp \
-				$(INC_DIR)FileReader.hpp \
-				$(INC_DIR)IDB.hpp \
-				$(INC_DIR)MigrationManager.hpp
+HEADERS = 		$(INC_DIR)Map.hpp \
+                $(INC_DIR)test_functions.hpp
 
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.cpp=.o))

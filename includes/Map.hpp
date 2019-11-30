@@ -7,11 +7,12 @@ const uint gSegment = 16;
 template<typename K, typename V>
 class Map
 {
-struct pair
-{
-	K key;
-	V value;
-};
+public:
+	struct pair
+	{
+		K key;
+		V value;
+	};
 
 private:
 	pair	*arr;
@@ -36,13 +37,30 @@ public:
 	{
 		if (rhs.arr)
 		{
-			for (int i = 0; i < rhs.size; i++)
+			for (uint i = 0; i < rhs.size(); i++)
 			{
 				arr[i] = rhs.arr[i];
 			}
 		}
 	}
-
+	Map& operator= (const Map& rhs)
+	{
+		if (this->capacity > rhs.size())
+		{
+			delete [] this->arr;
+			this->arr = new pair[rhs.max_size()];
+		}
+		this->len = rhs.size();
+		this->capacity = rhs.capacity;
+		if (rhs.arr && this->arr)
+		{
+			for (uint i = 0; i < rhs.size(); i++)
+			{
+				arr[i] = rhs.arr[i];
+			}
+		}
+		return (*this);
+	}
 	/* ***********************
 	 * *******Capacity********
 	 * *********************** */
@@ -50,16 +68,19 @@ public:
 	{
 		return (len);
 	}
+
 	bool empty() const
 	{
 		return (len == 0);
 	}
+
 	uint max_size() const
 	{
 		return (capacity);
 	}
+
 	/* ***********************
-	 * *******Accessors********
+	 * *******Accessors*******
 	 * *********************** */
 	V &operator[](const K &key)
 	{
@@ -81,7 +102,7 @@ public:
 	}
 
 	/* ***********************
-	 * *******Modifiers********
+	 * *******Modifiers*******
 	 * *********************** */
 	V *insert(const K &key, const V &val)
 	{
@@ -100,27 +121,7 @@ public:
 		return (&(arr[pos].value));
 	}
 
-//	const pair *begin() const
-//	{
-//		return arr;
-//	}
-//
-//	pair *begin()
-//	{
-//		return arr;
-//	}
-//
-//	const pair *end() const
-//	{
-//		return arr + len;
-//	}
-//
-//	pair *end()
-//	{
-//		return arr + len;
-//	}
-
-	void erase(const K &key)
+	uint erase(const K &key)
 	{
 		uint pos = bin_search_location(key);
 		if (pos != (uint)-1)
@@ -133,7 +134,9 @@ public:
 				*curr = *(curr + 1);
 				curr++;
 			}
+			return 1;
 		}
+		return 0;
 	}
 
 	void swap(Map &m)
@@ -159,16 +162,48 @@ public:
 		len = 0;
 		capacity = gSegment;
 	}
-
-	void show(void) const
+	/* *****************************
+	 * *******Almost iterators******
+	 * ***************************** */
+	const pair *begin() const
 	{
-		std::cout << "Size: " << len << " Capacity: " << capacity << std::endl;
-		for (int i = 0; i < len; i++)
-		{
-			std::cout << "Key: " << arr[i].key << " Value: " << arr[i].value << std::endl;
-		}
+		return arr;
 	}
 
+	pair *begin()
+	{
+		return arr;
+	}
+
+	const pair *end() const
+	{
+		return arr + len;
+	}
+
+	pair *end()
+	{
+		return arr + len;
+	}
+	/* *****************************
+	 * ********Operations***********
+	 * ***************************** */
+	pair *find(const K &key)
+	{
+		uint pos = bin_search_location(key);
+		if (pos == (uint)-1)
+			return this->end();
+		else
+			return (this->arr) + pos;
+	}
+
+	const pair *find (const K &key) const
+	{
+		uint pos = bin_search_location(key);
+		if (pos == (uint)-1)
+			return this->end();
+		else
+			(this->arr) + pos;
+	}
 private:
 	bool buf_alloc()
 	{
