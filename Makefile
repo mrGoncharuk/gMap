@@ -4,23 +4,19 @@ SRC_DIR = src/
 OBJ_DIR = obj/
 INC_DIR = includes/
 
-LIB = 	-l sqlite3 -pthread
+LIB = 
 
 
-SRC_FILES =		main.cpp \
-                nested_map_test.cpp \
-                string_as_key_test.cpp \
-                int_as_key_test.cpp
+SRC_FILES =		main.cpp 
 
 
-HEADERS = 		$(INC_DIR)Map.hpp \
-                $(INC_DIR)test_functions.hpp
+HEADERS = 		$(INC_DIR)AList.h 
 
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.cpp=.o))
 
-CC = g++ -std=c++98
-CFLAGS = -Wall -Werror -Wextra
+CC = g++ 
+CFLAGS = -std=c++98
 INC = 	-I $(INC_DIR)
 
 C_RED = \033[31m
